@@ -14,6 +14,9 @@ async function createDatabase() {
       console.log('Falha ao se conectar' + erro);
   })
 
+  app.get('/', (req,res)=>{
+    res.send('Olá mundo!')
+  })
     // Sincroniza os modelos com o banco de dados
     await sequelize.sync({ force: true });
     console.log('Tabelas criadas com sucesso.');
@@ -36,9 +39,9 @@ async function createDatabase() {
       });
       console.log('produto criado com sucesso.');
 
-    // Encerre a conexão com o banco de dados
-    await sequelize.close();
-    console.log('Conexão encerrada.');
+    // // Encerre a conexão com o banco de dados
+    // await sequelize.close();
+    // console.log('Conexão com o banco de dados foi encerrado.');
   } catch (error) {
     console.error('Erro ao criar o banco de dados:', error);
   }
@@ -46,6 +49,6 @@ async function createDatabase() {
 
 createDatabase();
 
-app.listen(5432, () =>{ 
-    console.log('Sevidor roadando na url http://localhost:5432')
+app.listen(8081, () =>{ 
+    console.log('Sevidor roadando na url http://localhost:8081')
 });
