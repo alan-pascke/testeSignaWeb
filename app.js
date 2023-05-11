@@ -37,7 +37,7 @@ async function createDatabase() {
         value: 20,
         stock: 3
       });
-      console.log('produto criado com sucesso.');
+    console.log('produto criado com sucesso.');
 
     // // Encerre a conexão com o banco de dados
     // await sequelize.close();

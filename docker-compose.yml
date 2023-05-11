@@ -1,0 +1,25 @@
+# Use postgres/example user/password credentials
+version: '3'
+
+services:
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: '123456'
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 5432:5432
+
+
+  app:
+    build: .
+    command: npm start
+    ports:
+      - 8081:8081
+    volumes:
+      - .:/user/app
