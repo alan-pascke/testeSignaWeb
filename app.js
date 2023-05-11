@@ -1,54 +1,48 @@
 const express = require('express');
 const app = express();
-
-const Custumer = require('./models/Custumer');
-const Product = require('./models/Product');
-const sequelize  = require('./database/db');
-
-async function createDatabase() {
-  try {
-
-    sequelize.authenticate().then(()=>{
-      console.log("Conectado com sucesso");
-  }).catch((erro)=>{
-      console.log('Falha ao se conectar' + erro);
-  })
-
-  app.get('/', (req,res)=>{
-    res.send('Olá mundo!')
-  })
-    // Sincroniza os modelos com o banco de dados
-    await sequelize.sync({ force: true });
-    console.log('Tabelas criadas com sucesso.');
-
-    // Cria um usuário de exemplo
-    await Custumer.create({
-      name: 'Exemplo',
-      email: 'exemplo@example.com',
-      cpf: '123456789101'
-    });
-    console.log('Usuário criado com sucesso.');
+const bodyParser = require('body-parser');
+const path = require('path')
+const admin = require('./routes/admin');
+const handlebars = require('express-handlebars');
 
 
-    // Cria um usuário de exemplo
-    await Product.create({
-        sku_order: 'teste',
-        title: 'teste',
-        value: 20,
-        stock: 3
-      });
-    console.log('produto criado com sucesso.');
+// //Sessão
+// app.use(sesion({
+//   secret: '654321',
+//   resave: true,
+//   saveUninitialized: true
+// }))
 
-    // // Encerre a conexão com o banco de dados
-    // await sequelize.close();
-    // console.log('Conexão com o banco de dados foi encerrado.');
-  } catch (error) {
-    console.error('Erro ao criar o banco de dados:', error);
-  }
-}
 
-createDatabase();
+
+
+
+// Public
+app.use(express.static(path.join(__dirname + 'public')))
+
+// Midleware
+app.use((req, res, next) => {
+  console.log('Midleware');
+  next()
+})
+
+// Configuração do body-parser
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// Handlebars
+app.engine('handlebars', handlebars.engine({defaultLayout: 'main'}))
+app.set('view engine', 'handlebars');
+app.set('views', __dirname);
+
+app.get('/' , (req, res) => {
+  res.send('Rota principal')
+})
+
+app.use('/admin', admin)
+
+
 
 app.listen(8081, () =>{ 
-    console.log('Sevidor roadando na url http://localhost:8081')
+  console.log('Sevidor roadando na url http://localhost:8081')
 });
