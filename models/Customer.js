@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize  = require('../database/db');
 
-const Custumer = sequelize.define('custumers', {
+const Customer = sequelize.define('customers', {
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
@@ -9,16 +9,16 @@ const Custumer = sequelize.define('custumers', {
     },
     name: {
         type: DataTypes.CHAR,
-        required: true
+        allowNull: false
     },
     email: {
         type: DataTypes.CHAR,
-        required: true
+        allowNull: false
     },
     cpf: {
         type: DataTypes.CHAR,
-        required: true
+        allowNull: false
     },
 });
 
-module.exports = Custumer
+module.exports = Customer

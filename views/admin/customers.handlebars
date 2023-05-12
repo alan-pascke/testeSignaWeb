@@ -1,0 +1,23 @@
+<div class="card">
+    <div class="card-body">
+        <h1 class="card-title">Lista de Clientes</h1>
+        <div class="mt-5">
+        {{#each customers}}
+            <ul class="list-group list-group-horizontal">
+                <li class="list-group-item">Nome</li>
+                <li class="list-group-item">Email</li>
+                <li class="list-group-item">CPF</li>
+            </ul>
+
+            <ul class="list-group list-group-horizontal-sm">
+                    <li class="list-group-item">{{name}}</li>
+                    <li class="list-group-item">{{email}}</li>
+                    <li class="list-group-item">{{cpf}}</li>    
+            </ul>
+        {{else}}
+            <h4>Nenhum cliente registrado1</h4>                
+        {{/each}}
+        </div>
+    </div>
+</div>
+
