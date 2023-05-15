@@ -2,22 +2,28 @@
     <div class="card-body">
         <h1 class="card-title">Lista de Clientes</h1>
         <div class="mt-5">
-        {{#each customers}}
-            <ul class="list-group list-group-horizontal">
-                <li class="list-group-item">Nome</li>
-                <li class="list-group-item">Email</li>
-                <li class="list-group-item">CPF</li>
-            </ul>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Nome</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">CPF</th>
+                    </tr>
+                </thead>
+                {{#each customers}}
+                <tbody>
+                    <tr>
+                        <td>{{name}}</td>
+                        <td>{{email}}</td>
+                        <td>{{cpf}}</td>
+                    </tr>    
+                {{else}}
+                    <h4>Nenhum cliente registrado1</h4>                
+                {{/each}}
 
-            <ul class="list-group list-group-horizontal-sm">
-                    <li class="list-group-item">{{name}}</li>
-                    <li class="list-group-item">{{email}}</li>
-                    <li class="list-group-item">{{cpf}}</li>    
-            </ul>
-        {{else}}
-            <h4>Nenhum cliente registrado1</h4>                
-        {{/each}}
+                </tbody>
+
+            </table>
         </div>
     </div>
 </div>
-
