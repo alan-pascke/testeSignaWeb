@@ -2,20 +2,43 @@
     <div class="card-body">
         <h1 class="card-title">Lista de Clientes</h1>
         <div class="mt-5">
+            <div>
+                <a href="customers/add">
+                    <button class="btn btn-secondary float-end">+</button>
+                </a>
+              
+            </div>
+            <div>
+                <a href="customers/add/{{_id}}" class="me-5">
+                    <button class="btn btn-secondary">Editar</button>
+                </a>
+               <a href="customers/add/{{_id}}">
+                    <button class="btn btn-secondary">Excluir</button>
+                </a>
+            </div>
             <table class="table">
                 <thead>
-                    <tr>
+                    <tr>    
                         <th scope="col">Nome</th>
                         <th scope="col">Email</th>
                         <th scope="col">CPF</th>
+                        <th scope="col">Ação</th>
                     </tr>
                 </thead>
                 {{#each customers}}
                 <tbody>
                     <tr>
+                        <td>
+                            <input type="checkbox" name="selectedCustumers" value="{{_id}}" onchange="toggleButtons()">
+                        </td>
                         <td>{{name}}</td>
                         <td>{{email}}</td>
                         <td>{{cpf}}</td>
+                        {{!-- <td>
+                            <a href="cutomers/add/{{_id}}">
+                                <button class="btn btn-primary">Editar</button>
+                            </a>
+                        </td> --}}
                     </tr>    
                 {{else}}
                     <h4>Nenhum cliente registrado1</h4>                

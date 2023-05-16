@@ -3,17 +3,28 @@ const app = express();
 const path = require('path')
 const admin = require('./routes/admin');
 const handlebars = require('express-handlebars');
+const session = require('express-session');
+const flash = require('express-flash');
 
-// //Sessão
-// app.use(sesion({
-//   secret: '654321',
-//   resave: true,
-//   saveUninitialized: true
-// }))
+
+//Sessão
+app.use(session({
+  secret: '654321',
+  resave: true,
+  saveUninitialized: true
+}))
+
+app.use(flash());
+
+app.use((req, res, next) => {
+  res.locals.success_msg = req.flash('success_msg')
+  res.locals.error_msg = req.flash('error_msg')
+  next()
+})
 
 
 // Public
-app.use(express.static(path.join(__dirname + 'public')))
+app.use(express.static(path.join(__dirname + '/public')))
 
 // Midleware
 app.use((req, res, next) => {
@@ -22,13 +33,12 @@ app.use((req, res, next) => {
 
 // Configuração do body-parser
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: false }));
 
 // Handlebars
 app.engine('handlebars', handlebars.engine({defaultLayout: 'main'}))
 app.set('view engine', 'handlebars');
 app.set('views', __dirname + '/views');
-
 
 
 //Rotas
