@@ -75,7 +75,7 @@ router.get('/customers/edit/:id', async (req,res) =>{
     }
 })
 
-router.post('/customers/edit/:id', [
+router.post('/customers/edit', [
     body('name').notEmpty().withMessage('O nome é obrigatório'),
     body('email').notEmpty().withMessage('O email é obrigatório').isEmail().withMessage('Email inválido'),
     body('cpf').notEmpty().withMessage('O CPF é obrigatório')
@@ -103,23 +103,7 @@ router.post('/customers/edit/:id', [
   });  
 
 
-function toggleButtons() {
-    const checkboxes = document.getElementsByName('selectedCustomers');
 
-    !checkboxes ? false : console.log('selecionado');
-    const editButtons = document.getElementsByClassName('btn-edit');
-    const deleteButtons = document.getElementsByClassName('btn-delete');
-  
-    const isAnyCheckboxSelected = Array.from(checkboxes).some(checkbox => checkbox.checked);
-  
-    Array.from(editButtons).forEach(button => {
-      button.style.display = isAnyCheckboxSelected ? 'inline-block' : 'none';
-    });
-  
-    Array.from(deleteButtons).forEach(button => {
-      button.style.display = isAnyCheckboxSelected ? 'inline-block' : 'none';
-    });
-}
 
 
 module.exports = router

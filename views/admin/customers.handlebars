@@ -6,49 +6,73 @@
                 <a href="customers/add">
                     <button class="btn btn-secondary float-end">+</button>
                 </a>
-              
-                {{#if selectedCustumers}}
-                    <a href="customers/edit/{{selectedCustumers.id}}" class="me-5">
+                
+                <div class="button-container float-end" style="display: none;">
+        
+                    <a href="customers/edit/{{selectedCustomers.[0]}}" class="me-2">
                         <button class="btn btn-secondary btn-edit">Editar</button>
                     </a>
-                    <a href="customers/delete/{{selectedCustumers.id}}">
-                            <button class="btn btn-secondary btn-delete">Excluir</button>
+                    <a href="customers/delete/{{selectedCustomers.[0]}}" class="me-2">
+                        <button class="btn btn-secondary btn-delete">Excluir</button>
                     </a>
-                {{/if}}
-            </div>
-            <div>
+                  
+                </div>
+                      
             </div>
             <table class="table">
                 <thead>
                     <tr>    
+                        <th></th>
                         <th scope="col">Nome</th>
                         <th scope="col">Email</th>
                         <th scope="col">CPF</th>
-                        <th scope="col">Ação</th>
                     </tr>
                 </thead>
-                {{#each customers}}
                 <tbody>
+                {{#each customers}}
                     <tr>
                         <td>
-                            <input type="checkbox" name="selectedCustumers[]" value="{{_id}}" onchange="toggleButtons()">
+                            <input type="checkbox" name="selectedCustomers[]" value="{{id}}" onchange="toggleButtons()">
                         </td>
                         <td>{{name}}</td>
                         <td>{{email}}</td>
                         <td>{{cpf}}</td>
-                        {{!-- <td>
-                            <a href="cutomers/add/{{_id}}">
-                                <button class="btn btn-primary">Editar</button>
-                            </a>
-                        </td> --}}
                     </tr>    
                 {{else}}
-                    <h4>Nenhum cliente registrado1</h4>                
+                    <tr>
+                        <td colspan="4">Nenhum cliente registrado1</td>
+                    </tr>    
                 {{/each}}
-
                 </tbody>
-
             </table>
         </div>
     </div>
 </div>
+
+<script>
+
+    function toggleButtons() {
+        const checkboxes = document.getElementsByName('selectedCustomers[]');
+        const buttonContainer = document.querySelector('.button-container');
+        const editButton = document.querySelector('.btn-edit');
+        const deleteButton = document.querySelector('.btn-delete');
+
+        let selectedCustomers = [];
+        for (let i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i].checked) {
+                selectedCustomers.push(checkboxes[i].value);
+            }
+        }
+
+        if (buttonContainer && editButton && deleteButton) {
+            if (selectedCustomers.length > 0) {
+                buttonContainer.style.display = 'block';
+                console.log(selectedCustomers)
+            } else {
+                buttonContainer.style.display = 'none';
+            }
+        }
+    }
+    
+
+</script>
