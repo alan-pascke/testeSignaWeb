@@ -7,14 +7,16 @@
                     <button class="btn btn-secondary float-end">+</button>
                 </a>
               
+                {{#if selectedCustumers}}
+                    <a href="customers/edit/{{selectedCustumers.id}}" class="me-5">
+                        <button class="btn btn-secondary btn-edit">Editar</button>
+                    </a>
+                    <a href="customers/delete/{{selectedCustumers.id}}">
+                            <button class="btn btn-secondary btn-delete">Excluir</button>
+                    </a>
+                {{/if}}
             </div>
             <div>
-                <a href="customers/add/{{_id}}" class="me-5">
-                    <button class="btn btn-secondary">Editar</button>
-                </a>
-               <a href="customers/add/{{_id}}">
-                    <button class="btn btn-secondary">Excluir</button>
-                </a>
             </div>
             <table class="table">
                 <thead>
@@ -29,7 +31,7 @@
                 <tbody>
                     <tr>
                         <td>
-                            <input type="checkbox" name="selectedCustumers" value="{{_id}}" onchange="toggleButtons()">
+                            <input type="checkbox" name="selectedCustumers[]" value="{{_id}}" onchange="toggleButtons()">
                         </td>
                         <td>{{name}}</td>
                         <td>{{email}}</td>
