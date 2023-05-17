@@ -6,17 +6,17 @@ services:
     image: postgres
     restart: always
     environment:
-      POSTGRES_PASSWORD: 'postgres'
+      POSTGRES_PASSWORD: '123456'
+      POSTGRES_DB: 'loja_signo'
     ports:
       - 5432:5432
-
+    expose:
+      - 5432
   adminer:
     image: adminer
     restart: always
     ports:
       - 8080:8080
-
-
   app:
     build: .
     command: npm start
@@ -24,3 +24,9 @@ services:
       - 8081:8081
     volumes:
       - .:/user/app
+    depends_on:
+      - db
+    links:
+      - db
+    env_file:
+      - .env
