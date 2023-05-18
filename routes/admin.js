@@ -36,7 +36,7 @@ router.get('/customers/add', (req, res) => {
 
 router.post('/customers/new', [
     body('name').notEmpty().withMessage({text: 'O nome é obrigatório' }),
-    body('email').notEmpty().withMessage({text: 'O email é obrigatório'}).isEmail().withMessage({text: 'Email inválido'}),
+    body('email').notEmpty().withMessage({text: 'O email é obrigatório'}).isEmail().withMessage({ text: 'Email inválido' }),
     body('cpf').notEmpty().withMessage({text: 'O CPF é obrigatório'})    
 ], async (req, res) => {
 
@@ -46,7 +46,7 @@ router.post('/customers/new', [
     if (!errors.isEmpty()) {
         const errorMessages = errors.array().map(error => error.msg);
         console.log(errorMessages);
-        res.render('admin/customers_add' , {errors: errorMessages})
+        res.render('admin/customers_add' , { errors: errorMessages })
     } else {
 
         try {
@@ -62,17 +62,21 @@ router.post('/customers/new', [
     }
 })
 
-router.get('/customers/edit/:id', async (req,res) =>{
+router.get('/customers/edit/:id', async (req,res) => {
+
     try {
         
-        const customer = await Customer.findByPk(req.params.id)
+        const customerId = req.params.id
+        const customer = await Customer.findByPk(customerId);
+
         if (!customer) {
             return res.status(400).send('cliente não encontrado');
         }
-        res.render('admin/customers_add')
+        res.render('admin/customers_edit', { customer })
     } catch (error) {
         res.status(500).send('Erro ao buscar o cliente ' + error)
     }
+
 })
 
 router.post('/customers/edit', [
@@ -81,7 +85,7 @@ router.post('/customers/edit', [
     body('cpf').notEmpty().withMessage('O CPF é obrigatório')
   ], async (req, res) => {
     try {
-        const { id } = req.params;
+        const { id } = req.para;
 
         const customer = await Customer.findByPk(id);
 
@@ -97,10 +101,10 @@ router.post('/customers/edit', [
 
         req.flash('success', 'Cliente atualizado com sucesso!');
         res.redirect('/admin/customers');
-        } catch (error) {
+    } catch (error) {
         res.status(500).send('Erro ao atualizar o cliente: ' + error);
-        }
-  });  
+    }
+});  
 
 
 

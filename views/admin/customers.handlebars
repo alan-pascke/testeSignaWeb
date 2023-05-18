@@ -9,13 +9,8 @@
                 
                 <div class="button-container float-end" style="display: none;">
         
-                    <a href="customers/edit/{{selectedCustomers.[0]}}" class="me-2">
-                        <button class="btn btn-secondary btn-edit">Editar</button>
-                    </a>
-                    <a href="customers/delete/{{selectedCustomers.[0]}}" class="me-2">
-                        <button class="btn btn-secondary btn-delete">Excluir</button>
-                    </a>
-                  
+                    <button class="btn btn-secondary btn-delete me-4" onclick="deleteSelectedCustomers()">Excluir</button>
+                
                 </div>
                       
             </div>
@@ -26,6 +21,7 @@
                         <th scope="col">Nome</th>
                         <th scope="col">Email</th>
                         <th scope="col">CPF</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -37,6 +33,11 @@
                         <td>{{name}}</td>
                         <td>{{email}}</td>
                         <td>{{cpf}}</td>
+                        <td>
+                            <a href="./customers/edit/{{id}}">
+                                <button class="btn btn-secondary btn-edit">Editar</button>
+                            </a>
+                        </td>
                     </tr>    
                 {{else}}
                     <tr>
@@ -54,25 +55,48 @@
     function toggleButtons() {
         const checkboxes = document.getElementsByName('selectedCustomers[]');
         const buttonContainer = document.querySelector('.button-container');
-        const editButton = document.querySelector('.btn-edit');
-        const deleteButton = document.querySelector('.btn-delete');
 
-        let selectedCustomers = [];
+        const selectedCustomers = [];
         for (let i = 0; i < checkboxes.length; i++) {
             if (checkboxes[i].checked) {
                 selectedCustomers.push(checkboxes[i].value);
             }
         }
 
-        if (buttonContainer && editButton && deleteButton) {
+        if (buttonContainer) {
             if (selectedCustomers.length > 0) {
                 buttonContainer.style.display = 'block';
-                console.log(selectedCustomers)
             } else {
                 buttonContainer.style.display = 'none';
             }
         }
     }
-    
+
+    function editSelectedCustomers() {
+        const selectedCustomers = document.querySelector('.btn-edit');
+        if (selectedCustomers.length > 0) {
+            const editUrl = 'customers/edit/' + selectedCustomers[0];
+            window.location.href = editUrl;
+        }
+    }
+
+    function deleteSelectedCustomers() {
+        const selectedCustomers = getSelectedCustomers();
+        if (selectedCustomers.length > 0) {
+            const deleteUrl = 'customers/delete/' + selectedCustomers[0];
+            window.location.href = deleteUrl;
+        }
+    }
+
+    function getSelectedCustomers() {
+        const checkboxes = document.getElementsByName('selectedCustomers[]');
+        const selectedCustomers = [];
+        for (let i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i].checked) {
+                selectedCustomers.push(checkboxes[i].value);
+            }
+        }
+        return selectedCustomers;
+    }
 
 </script>

@@ -1,0 +1,26 @@
+{{#each errors}}
+    <div class="alert alert-danger">
+        {{text}}
+    </div>
+    
+    {{else}}
+
+{{/each}}
+
+<h3>Novo Cliente</h3>
+<div class="card">
+    <div class="card-body">
+        <form action="./edit/{{customer._id}}" method="POST">
+            <label for="name">Nome</label>
+                <input type="text" id="name" name="name" class="form-control" value="{{customer.name}}">
+            
+            <label for="email">Email</label>
+                <input type="email" id="email" name="email" class="form-control" value="{{#with customer}}{{email}}{{/with}}">
+            
+            <label for="cpf">CPF</label>
+                <input type="text" id="cpf" name="cpf" class="form-control" value="{{#with customer}}{{cpf}}{{/with}}">
+                <br>
+            <button type="submit" class="btn btn-success">Adicionar</button>
+        </form>
+    </div>
+</div>
