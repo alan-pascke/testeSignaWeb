@@ -38,7 +38,8 @@ app.use(express.urlencoded({ extended: false }));
 // Handlebars
 app.engine('handlebars', handlebars.engine({defaultLayout: 'main'}))
 app.set('view engine', 'handlebars');
-app.set('views', __dirname + '/views');
+app.set('views', path.join(__dirname + '/views'));
+
 
 
 //Rotas

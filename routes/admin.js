@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const Customer = require('../models/Customer');
-const sequelize = require('../database/db');
 const { body, validationResult } = require('express-validator');
+const { where } = require('sequelize');
 
 
 // Rota para renderizar a página HTML
@@ -45,7 +45,6 @@ router.post('/customers/new', [
     
     if (!errors.isEmpty()) {
         const errorMessages = errors.array().map(error => error.msg);
-        console.log(errorMessages);
         res.render('admin/customers_add' , { errors: errorMessages })
     } else {
 
@@ -53,59 +52,53 @@ router.post('/customers/new', [
     
             await Customer.create({name, email, cpf});
             req.flash('success_msg', 'Adicionado com sucesso!')
-            res.status(200).redirect('/admin/customers')
+            res.redirect('/admin/customers')
         } catch (error) {
             req.flash('error_msg', 'Houve um erro ao adicionar um cliente: ' + error)
-            res.status(500).redirect('/admin')
+            res.redirect('/admin/customers')
         }
 
     }
 })
 
 router.get('/customers/edit/:id', async (req,res) => {
-
-    try {
         
-        const customerId = req.params.id
-        const customer = await Customer.findByPk(customerId);
-
-        if (!customer) {
-            return res.status(400).send('cliente não encontrado');
-        }
-        res.render('admin/customers_edit', { customer })
-    } catch (error) {
-        res.status(500).send('Erro ao buscar o cliente ' + error)
-    }
-
+    await Customer.findByPk(req.params.id)
+        .then((customer) =>{
+            res.render('admin/customers_edit', { customer: customer.toJSON() })
+        })
+        .catch((error) =>{
+            res.status(500).send('Erro ao buscar o cliente. Erro: ' + error)
+        }) 
 })
 
-router.post('/customers/edit', [
-    body('name').notEmpty().withMessage('O nome é obrigatório'),
-    body('email').notEmpty().withMessage('O email é obrigatório').isEmail().withMessage('Email inválido'),
-    body('cpf').notEmpty().withMessage('O CPF é obrigatório')
+router.post('/customers/edited/:id', [
+    body('name').notEmpty().withMessage({text: 'O nome é obrigatório' }),
+    body('email').notEmpty().withMessage({text: 'O email é obrigatório'}).isEmail().withMessage({ text: 'Email inválido' }),
+    body('cpf').notEmpty().withMessage({text: 'O CPF é obrigatório'})    
   ], async (req, res) => {
-    try {
-        const { id } = req.para;
-
-        const customer = await Customer.findByPk(id);
-
-        !customer ? res.status(404).send('Cliente não encontrado') : true 
-
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            const errorMessages = errors.array().map(error => error.msg);
-            return res.render('admin/customers', { customer, errors: errorMessages });
+    console.log('aqui');
+    const errors = validationResult(req);
+    const {id} = req.params
+    const {name, email, cpf} = req.body
+    
+    if (!errors.isEmpty()) {
+        const errorMessages = errors.array().map(error => error.msg);
+        return res.render('/admin/customers', { errors: errorMessages });
+    } else {
+    
+        try {
+            await Customer.update(
+                {name, email, cpf}, 
+                {where: { id }}
+            );
+            req.flash('success', 'Cliente editado com sucesso!');
+            res.redirect('/admin/customers');
+        } catch (error) {
+            res.status(500).send('Erro ao atualizar o cliente: ' + error);
         }
-
-        await customer.update(req.body);
-
-        req.flash('success', 'Cliente atualizado com sucesso!');
-        res.redirect('/admin/customers');
-    } catch (error) {
-        res.status(500).send('Erro ao atualizar o cliente: ' + error);
     }
 });  
-
 
 
 
