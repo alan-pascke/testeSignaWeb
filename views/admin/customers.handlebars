@@ -18,6 +18,7 @@
                 <thead>
                     <tr>    
                         <th></th>
+                        <th scope="col">ID</th>
                         <th scope="col">Nome</th>
                         <th scope="col">Email</th>
                         <th scope="col">CPF</th>
@@ -30,6 +31,7 @@
                         <td>
                             <input type="checkbox" name="selectedCustomers[]" value="{{id}}" onchange="toggleButtons()">
                         </td>
+                        <td>{{id}}</td>
                         <td>{{name}}</td>
                         <td>{{email}}</td>
                         <td>{{cpf}}</td>

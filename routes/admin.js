@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const Customer = require('../models/Customer');
 const { body, validationResult } = require('express-validator');
-const { where } = require('sequelize');
 
 
 // Rota para renderizar a página HTML
@@ -25,7 +24,6 @@ router.get('/customers', async (req, res) => {
         
         res.render('admin/customers', { customers: trimedCustomers });
     } catch (error) {
-        req.flash('error_msg', )
         res.status(500).send('erro ao obter os dados do cliente: ' + error)
     }
 })
@@ -72,19 +70,19 @@ router.get('/customers/edit/:id', async (req,res) => {
         }) 
 })
 
-router.post('/customers/edited/:id', [
+router.post('/customers/edit/:id', [
     body('name').notEmpty().withMessage({text: 'O nome é obrigatório' }),
     body('email').notEmpty().withMessage({text: 'O email é obrigatório'}).isEmail().withMessage({ text: 'Email inválido' }),
     body('cpf').notEmpty().withMessage({text: 'O CPF é obrigatório'})    
   ], async (req, res) => {
-    console.log('aqui');
     const errors = validationResult(req);
     const {id} = req.params
     const {name, email, cpf} = req.body
+
     
     if (!errors.isEmpty()) {
         const errorMessages = errors.array().map(error => error.msg);
-        return res.render('/admin/customers', { errors: errorMessages });
+        return res.render('admin/customers_edit', { errors: errorMessages });
     } else {
     
         try {
@@ -92,10 +90,12 @@ router.post('/customers/edited/:id', [
                 {name, email, cpf}, 
                 {where: { id }}
             );
-            req.flash('success', 'Cliente editado com sucesso!');
-            res.redirect('/admin/customers');
+            req.flash('success_msg', 'Adicionado com sucesso!')
+            res.redirect('admin/customers')
         } catch (error) {
-            res.status(500).send('Erro ao atualizar o cliente: ' + error);
+            req.flash('error_msg', 'Houve um erro ao adicionar um cliente: ' + error)
+            res.redirect('admin/customers')
+            console.log(error);
         }
     }
 });  

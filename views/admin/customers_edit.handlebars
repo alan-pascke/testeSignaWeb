@@ -11,7 +11,7 @@
 <div class="card">
     <div class="card-body">
 
-        <form action="/admin/customers/edited/{{customer.id}}" method="POST">
+        <form action="/admin/customers/edit/{{customer.id}}" method="POST">
             <input type="hidden" name="id" id="{{customer.id}}" value="{{customer.id}}">
             <label for="name">Nome</label>
                 <input type="text" id="name" name="name" class="form-control" value="{{customer.name}}">
