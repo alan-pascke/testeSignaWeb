@@ -5,6 +5,7 @@ const admin = require('./routes/admin');
 const handlebars = require('express-handlebars');
 const session = require('express-session');
 const flash = require('express-flash');
+const bodyParser = require('body-parser');
 
 
 //Sessão
@@ -32,8 +33,8 @@ app.use((req, res, next) => {
 })
 
 // Configuração do body-parser
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 // Handlebars
 app.engine('handlebars', handlebars.engine({defaultLayout: 'main'}))

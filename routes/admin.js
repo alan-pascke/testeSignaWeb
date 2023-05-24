@@ -47,12 +47,9 @@ router.post('/customers/new', [
     } else {
 
         try {
-    
             await Customer.create({name, email, cpf});
-            req.flash('success_msg', 'Adicionado com sucesso!')
             res.redirect('/admin/customers')
         } catch (error) {
-            req.flash('error_msg', 'Houve um erro ao adicionar um cliente: ' + error)
             res.redirect('/admin/customers')
         }
 
@@ -73,16 +70,14 @@ router.get('/customers/edit/:id', async (req,res) => {
 router.post('/customers/edit/:id', [
     body('name').notEmpty().withMessage({text: 'O nome é obrigatório' }),
     body('email').notEmpty().withMessage({text: 'O email é obrigatório'}).isEmail().withMessage({ text: 'Email inválido' }),
-    body('cpf').notEmpty().withMessage({text: 'O CPF é obrigatório'})    
+    body('cpf').notEmpty().withMessage({text: 'O CPF é obrigatório'}).isInt().withMessage({text: 'CPF inválido'})  
   ], async (req, res) => {
     const errors = validationResult(req);
-    const {id} = req.params
-    const {name, email, cpf} = req.body
-
+    const {id ,name, email, cpf} = req.body
     
     if (!errors.isEmpty()) {
         const errorMessages = errors.array().map(error => error.msg);
-        return res.render('admin/customers_edit', { errors: errorMessages });
+        res.render('admin/customers_edit', { customer: req.body, errors: errorMessages});
     } else {
     
         try {
@@ -90,17 +85,12 @@ router.post('/customers/edit/:id', [
                 {name, email, cpf}, 
                 {where: { id }}
             );
-            req.flash('success_msg', 'Adicionado com sucesso!')
-            res.redirect('admin/customers')
+            res.redirect('/admin/customers')
         } catch (error) {
-            req.flash('error_msg', 'Houve um erro ao adicionar um cliente: ' + error)
-            res.redirect('admin/customers')
-            console.log(error);
+            res.redirect('/admin/customers')
         }
     }
 });  
-
-
 
 
 module.exports = router

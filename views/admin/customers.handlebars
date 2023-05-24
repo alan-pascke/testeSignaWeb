@@ -8,7 +8,7 @@
                 </a>
                 
                 <div class="button-container float-end" style="display: none;">
-        
+                    
                     <button class="btn btn-secondary btn-delete me-4" onclick="deleteSelectedCustomers()">Excluir</button>
                 
                 </div>
@@ -74,31 +74,25 @@
         }
     }
 
-    function editSelectedCustomers() {
-        const selectedCustomers = document.querySelector('.btn-edit');
-        if (selectedCustomers.length > 0) {
-            const editUrl = 'customers/edit/' + selectedCustomers[0];
-            window.location.href = editUrl;
-        }
-    }
-
     function deleteSelectedCustomers() {
-        const selectedCustomers = getSelectedCustomers();
-        if (selectedCustomers.length > 0) {
-            const deleteUrl = 'customers/delete/' + selectedCustomers[0];
-            window.location.href = deleteUrl;
-        }
-    }
+        const checkboxes = document.querySelectorAll('input[name="selectedCustomers[]"]:checked');
+        const selectedCustomers = Array.from(checkboxes).map(checkbox => checkbox.value);
 
-    function getSelectedCustomers() {
-        const checkboxes = document.getElementsByName('selectedCustomers[]');
-        const selectedCustomers = [];
-        for (let i = 0; i < checkboxes.length; i++) {
-            if (checkboxes[i].checked) {
-                selectedCustomers.push(checkboxes[i].value);
-            }
-        }
-        return selectedCustomers;
+        fetch('/api/customers/delete', {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ selectedCustomers })
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Manipule a resposta do servidor aqui
+            console.log(data);
+        })
+        .catch(error => {
+            // Manipule erros de requisição aqui
+            console.error(error);
+        });
     }
-
 </script>
