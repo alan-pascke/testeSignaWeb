@@ -1,0 +1,116 @@
+<div class="card">
+    <div class="card-body">
+        <h1 class="card-title">Lista de Produtos</h1>
+        <div class="mt-5">
+            <div>
+                <a href="products/add">
+                    <button class="btn btn-secondary float-end">+</button>
+                </a>
+                
+                <div class="button-container float-end" style="display: none;">
+                    
+                    <button class="btn btn-secondary btn-delete me-4" id="btn-delete" onclick="deleteProducts()">Excluir</button>
+                
+                </div>
+                      
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>    
+                        <th></th>
+                        <th scope="col">ID</th>
+                        <th scope="col">Título</th>
+                        <th scope="col">Valor</th>
+                        <th scope="col">Estoque</th>
+                        <th scope="col">sku</th>
+                        <th scope="col">Data</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                {{#each products}}
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="selectedProducts[]" value="{{id}}" onchange="toggleButtons()"  >
+                        </td>
+                        <td>{{id}}</td>
+                        <td>{{title}}</td>
+                        <td>{{value}}</td>
+                        <td>{{stock}}</td>
+                        <td>{{sku}}</td>
+                        <td>{{date}}</td>
+                        <td>
+                            <a href="./products/edit/{{id}}">
+                                <button class="btn btn-secondary btn-edit">Editar</button>
+                            </a>
+                        </td>
+                    </tr>    
+                {{else}}
+                    <tr>
+                        <td colspan="4">Nenhum cliente registrado1</td>
+                    </tr>    
+                {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    
+    
+    function toggleButtons() {
+        const checkboxes = document.getElementsByName('selectedProducts[]');
+        const buttonContainer = document.querySelector('.button-container');
+
+        const selectedProducts = [];
+        for (let i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i].checked) {
+                selectedProducts.push(checkboxes[i].value);
+            }
+        }
+
+        if (buttonContainer) {
+            if (selectedProducts.length > 0) {
+                buttonContainer.style.display = 'block';
+            } else {
+                buttonContainer.style.display = 'none';
+            }
+        }
+    }
+
+    function deleteproducts() {
+        const checkboxes = document.getElementsByName('selectedproducts[]');
+        const selectedProducts = [];
+
+
+        for (let i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i].checked) {
+                selectedProducts.push(checkboxes[i].value);
+            }
+        }
+
+        if (selectedProducts.length > 0) {
+            confirm('Tem certeza que deseja excluir?') == 'ok' ? 
+                fetch('/admin/products/delete', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ products: selectedProducts })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        location.reload();
+                    } else {
+                        alert('Erro ao excluir o produto!');
+                    }
+                })
+                .catch(error => {
+                    alert(error);
+                })
+            : false
+        }
+    }
+        
+</script>

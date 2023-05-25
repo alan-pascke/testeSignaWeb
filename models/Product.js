@@ -11,23 +11,23 @@ const Product = sequelize.define('products', {
     date_of_order: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
-        required: true
+        allowNull: true
     },
     sku_order: {
         type: DataTypes.CHAR,
-        required: true
+        allowNull: true
     },
     title: {
         type: DataTypes.CHAR,
-        required: true
+        allowNull: true
     },
     value: {
         type: DataTypes.FLOAT,
-        required: true
+        allowNull: true
     },
     stock: {
         type: DataTypes.INTEGER,
-        required: true
+        allowNull: true
     },
 });
 
