@@ -9,7 +9,7 @@
                 
                 <div class="button-container float-end" style="display: none;">
                     
-                    <button class="btn btn-secondary btn-delete me-4" onclick="deleteSelectedCustomers()">Excluir</button>
+                    <button class="btn btn-secondary btn-delete me-4" id="btn-delete" onclick="deleteCustomers()">Excluir</button>
                 
                 </div>
                       
@@ -29,7 +29,7 @@
                 {{#each customers}}
                     <tr>
                         <td>
-                            <input type="checkbox" name="selectedCustomers[]" value="{{id}}" onchange="toggleButtons()">
+                            <input type="checkbox" name="selectedCustomers[]" value="{{id}}" onchange="toggleButtons()"  >
                         </td>
                         <td>{{id}}</td>
                         <td>{{name}}</td>
@@ -53,7 +53,8 @@
 </div>
 
 <script>
-
+    
+    
     function toggleButtons() {
         const checkboxes = document.getElementsByName('selectedCustomers[]');
         const buttonContainer = document.querySelector('.button-container');
@@ -74,25 +75,38 @@
         }
     }
 
-    function deleteSelectedCustomers() {
-        const checkboxes = document.querySelectorAll('input[name="selectedCustomers[]"]:checked');
-        const selectedCustomers = Array.from(checkboxes).map(checkbox => checkbox.value);
+    function deleteCustomers() {
+        const checkboxes = document.getElementsByName('selectedCustomers[]');
+        const selectedCustomers = [];
 
-        fetch('/api/customers/delete', {
-            method: 'POST',
-            headers: {
-            'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ selectedCustomers })
-        })
-        .then(response => response.json())
-        .then(data => {
-            // Manipule a resposta do servidor aqui
-            console.log(data);
-        })
-        .catch(error => {
-            // Manipule erros de requisição aqui
-            console.error(error);
-        });
+
+        for (let i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i].checked) {
+                selectedCustomers.push(checkboxes[i].value);
+            }
+        }
+
+        if (selectedCustomers.length > 0) {
+            confirm('Tem certeza que deseja excluir?') == 'ok' ? 
+                fetch('/admin/customers/delete', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ customers: selectedCustomers })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        location.reload();
+                    } else {
+                        alert('Erro ao excluir clientes!');
+                    }
+                })
+                .catch(error => {
+                    alert(error);
+                })
+            : false
+        }
     }
+        
 </script>

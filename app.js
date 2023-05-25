@@ -1,11 +1,11 @@
 const express = require('express');
 const app = express();
 const path = require('path')
-const admin = require('./routes/admin');
+const customerRouter = require('./routes/customerRouter');
+const productRouter = require('./routes/productsRouter');
 const handlebars = require('express-handlebars');
 const session = require('express-session');
-const flash = require('express-flash');
-const bodyParser = require('body-parser');
+
 
 
 //Sessão
@@ -14,14 +14,6 @@ app.use(session({
   resave: true,
   saveUninitialized: true
 }))
-
-app.use(flash());
-
-app.use((req, res, next) => {
-  res.locals.success_msg = req.flash('success_msg')
-  res.locals.error_msg = req.flash('error_msg')
-  next()
-})
 
 
 // Public
@@ -33,8 +25,8 @@ app.use((req, res, next) => {
 })
 
 // Configuração do body-parser
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 // Handlebars
 app.engine('handlebars', handlebars.engine({defaultLayout: 'main'}))
@@ -48,7 +40,9 @@ app.get('/' , (req, res) => {
   res.send('Rota principal')
 })
 
-app.use('/admin', admin)
+app.use('/admin', customerRouter)
+
+app.use('/admin', productRouter)
 
 
 app.listen(8081, () =>{ 

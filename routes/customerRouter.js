@@ -3,7 +3,6 @@ const router = express.Router();
 const Customer = require('../models/Customer');
 const { body, validationResult } = require('express-validator');
 
-
 // Rota para renderizar a página HTML
 router.get('/', (req, res) => {
     res.render('admin/index');
@@ -64,7 +63,7 @@ router.get('/customers/edit/:id', async (req,res) => {
         })
         .catch((error) =>{
             res.status(500).send('Erro ao buscar o cliente. Erro: ' + error)
-        }) 
+        })
 })
 
 router.post('/customers/edit/:id', [
@@ -92,6 +91,24 @@ router.post('/customers/edit/:id', [
     }
 });  
 
+router.post('/customers/delete' , async (req, res) => {
+    console.log('acessado');
+    const selectedCustomers = req.body.customers
+
+    console.log(selectedCustomers)
+    await Customer.destroy({
+        where: {
+            id: selectedCustomers
+        }
+    })
+    .then(() => {
+        res.sendStatus(200);
+    })
+    .catch(error => {
+        console.error(error);
+        res.sendStatus(500);
+    });
+})
 
 module.exports = router
 
