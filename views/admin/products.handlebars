@@ -79,10 +79,9 @@
         }
     }
 
-    function deleteproducts() {
-        const checkboxes = document.getElementsByName('selectedproducts[]');
+    function deleteProducts() {
+        const checkboxes = document.getElementsByName('selectedProducts[]');
         const selectedProducts = [];
-
 
         for (let i = 0; i < checkboxes.length; i++) {
             if (checkboxes[i].checked) {
@@ -90,20 +89,15 @@
             }
         }
 
+    
         if (selectedProducts.length > 0) {
-            confirm('Tem certeza que deseja excluir?') == 'ok' ? 
-                fetch('/admin/products/delete', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ products: selectedProducts })
-                })
+            confirm('Tem certeza que deseja excluir?') == true ? 
+                axios.post('/admin/products/delete', { products: selectedProducts })
                 .then(response => {
-                    if (response.ok) {
+                    if (response.status == 200) {
                         location.reload();
                     } else {
-                        alert('Erro ao excluir o produto!');
+                        console.log('houve um erro')
                     }
                 })
                 .catch(error => {

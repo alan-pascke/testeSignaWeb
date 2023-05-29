@@ -52,6 +52,7 @@
     </div>
 </div>
 
+
 <script>
     
     
@@ -86,20 +87,15 @@
             }
         }
 
+
         if (selectedCustomers.length > 0) {
-            confirm('Tem certeza que deseja excluir?') == 'ok' ? 
-                fetch('/admin/customers/delete', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ customers: selectedCustomers })
-                })
+            confirm('Tem certeza que deseja excluir?') == true ? 
+                axios.post('/admin/customers/delete', { customers: selectedCustomers })
                 .then(response => {
-                    if (response.ok) {
+                    if (response.status == 200) {
                         location.reload();
                     } else {
-                        alert('Erro ao excluir clientes!');
+                        console.log('houve um erro')
                     }
                 })
                 .catch(error => {
