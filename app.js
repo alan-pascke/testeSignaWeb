@@ -12,19 +12,15 @@ const Product = require('./models/Product');
 
 async function createDatabaseProducts() {
   try {
-    await sequelize.authenticate();
-    console.log('Conexão estabelecida com sucesso.');
-
     // Sincronize os modelos com o banco de dados
     await sequelize.sync({ force: true });
     console.log('Tabelas criadas com sucesso.');
 
     // Crie um produto de exemplo
     await Product.create({
-      date_of_order: new Date(),
       title: 'Exemplo de Produto',
       value: 10.99,
-      sku_order: 'sla',
+      sku_product: 'sla',
       stock: 2,
     });
     console.log('Produto criado com sucesso.');

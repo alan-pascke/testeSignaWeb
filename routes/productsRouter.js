@@ -14,9 +14,8 @@ router.get('/products', async (req, res) => {
     try {
         const products = await Product.findAll();
         const trimedProducts = products.map(product => ({
-            id: product.id_order,
-            date: formatDateTime(product.date_of_order),
-            sku: product.sku_order.trim(),
+            id: product.id,
+            sku: product.sku_product.trim(),
             value: product.value,
             title: product.title.trim(),
             stock: product.stock,
@@ -35,13 +34,13 @@ router.get('/products/add', (req, res) => {
 
 router.post('/products/new', [
     body('title').notEmpty().withMessage({ text: 'O campo *titulo é obrigatório' }),
-    body('sku_order').notEmpty().withMessage({ text: 'O campo *sku é obrigatório' }),
+    body('sku_product').notEmpty().withMessage({ text: 'O campo *sku é obrigatório' }),
     body('value').notEmpty().withMessage({ text: 'O campo *valor é obrigatório' }).isFloat().withMessage({ text: 'Valor Inválido' }),
     body('stock').notEmpty().withMessage({ text: 'O campo *estoque é obrigatório' }).isInt().withMessage({ text: 'Erro no campo estoque' })    
 ], async (req, res) => {
 
     const errors = validationResult(req)
-    const {title, sku_order, value, stock} = req.body
+    const {title, sku_product, value, stock} = req.body
     
     if (!errors.isEmpty()) {
         const errorMessages = errors.array().map(error => error.msg);
@@ -49,7 +48,7 @@ router.post('/products/new', [
     } else {
 
         try {
-            await Product.create({title, sku_order, value, stock});
+            await Product.create({title, sku_product, value, stock});
             res.redirect('/admin/products')
         } catch (error) {
             console.log('houve um erro');
@@ -71,23 +70,24 @@ router.get('/products/edit/:id', async (req,res) => {
 })
 
 router.post('/products/edit/:id', [
-    body('title').notEmpty().withMessage({text: 'O campo *nome é obrigatório' }),
-    body('sku').notEmpty().withMessage({text: 'O campo *sku é obrigatório' }),
-    body('value').notEmpty().withMessage({text: 'O campo *valor é obrigatório' }).isFloat().withMessage({ text: 'Valor Inválido'}),
+    body('title').notEmpty().withMessage({ text: 'O campo *nome é obrigatório' }),
+    body('sku').notEmpty().withMessage({ text: 'O campo *sku é obrigatório' }),
+    body('value').notEmpty().withMessage({ text: 'O campo *valor é obrigatório' }).isFloat().withMessage({ text: 'Valor Inválido'}),
     body('stock').notEmpty().withMessage({ text: 'O campo *estoque é obrigatório' }).isInt().withMessage({ text: 'Estoque inválido' })    
 ], async (req, res) => {
     const errors = validationResult(req);
-    const {id_order, title, sku, value, stock} = req.body
+    console.log(req.body);
+    const { id, title, sku, value, stock } = req.body
     
     if (!errors.isEmpty()) {
         const errorMessages = errors.array().map(error => error.msg);
-        res.render('admin/products_edit', { product: req.body, errors: errorMessages});
+        res.render('admin/products_edit', { product: req.body, errors: errorMessages });
     } else {
     
         try {
             await Product.update(
-                {title, sku_order: sku , value, stock}, 
-                {where: { id_order }}
+                {title, sku_product: sku , value, stock}, 
+                {where: { id }}
             );
             res.redirect('/admin/products')
         } catch (error) {
@@ -99,7 +99,6 @@ router.post('/products/edit/:id', [
 router.post('/products/delete' , async (req, res) => {
     const selectedProducts = req.body.products
     try {
-
         await Product.destroy({
             where: {
                 id_order: selectedProducts

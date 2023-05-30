@@ -23,7 +23,6 @@
                         <th scope="col">Valor</th>
                         <th scope="col">Estoque</th>
                         <th scope="col">sku</th>
-                        <th scope="col">Data</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -38,7 +37,6 @@
                         <td>{{value}}</td>
                         <td>{{stock}}</td>
                         <td>{{sku}}</td>
-                        <td>{{date}}</td>
                         <td>
                             <a href="./products/edit/{{id}}">
                                 <button class="btn btn-secondary btn-edit">Editar</button>
@@ -47,7 +45,7 @@
                     </tr>    
                 {{else}}
                     <tr>
-                        <td colspan="4">Nenhum cliente registrado1</td>
+                        <td colspan="6" class="">Nenhum produto registrado</td>
                     </tr>    
                 {{/each}}
                 </tbody>

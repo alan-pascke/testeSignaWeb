@@ -3,17 +3,12 @@ const sequelize = require('../database/db');
 
 
 const Product = sequelize.define('products', {
-    id_order: {
+    id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true
     },
-    date_of_order: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
-        allowNull: true
-    },
-    sku_order: {
+    sku_product: {
         type: DataTypes.CHAR,
         allowNull: true
     },
