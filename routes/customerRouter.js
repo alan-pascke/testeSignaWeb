@@ -42,7 +42,7 @@ router.post('/customers/new', [
     } else {
 
         try {
-            await Customer.create({name, email, cpf});
+            await Customer.create({ name, email, cpf });
             res.redirect('/admin/customers')
         } catch (error) {
             res.redirect('/admin/customers')
@@ -68,7 +68,7 @@ router.post('/customers/edit/:id', [
     body('cpf').notEmpty().withMessage({text: 'O CPF é obrigatório'}).isInt().withMessage({text: 'CPF inválido'})  
   ], async (req, res) => {
     const errors = validationResult(req);
-    const {id ,name, email, cpf} = req.body
+    const { id ,name, email, cpf } = req.body
     
     if (!errors.isEmpty()) {
         const errorMessages = errors.array().map(error => error.msg);

@@ -1,5 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../database/db');
+const Customer = require('./Customer');
+const Product = require('./Product');
 
 const Order = sequelize.define('orders', {
     id: {
@@ -13,5 +15,8 @@ const Order = sequelize.define('orders', {
         allowNull: true
     },
 })
+
+Order.belongsTo(Customer);
+Order.belongsTo(Product);
 
 module.exports = Order

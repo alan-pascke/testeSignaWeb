@@ -87,7 +87,6 @@
             }
         }
 
-    
         if (selectedProducts.length > 0) {
             confirm('Tem certeza que deseja excluir?') == true ? 
                 axios.post('/admin/products/delete', { products: selectedProducts })
