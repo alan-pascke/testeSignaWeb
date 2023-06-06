@@ -3,12 +3,10 @@ const router = express.Router();
 const Customer = require('../models/Customer');
 const { body, validationResult } = require('express-validator');
 
-// Rota para renderizar a página HTML
 router.get('/', (req, res) => {
     res.render('admin/index');
 });
 
-// Rota Customers
 router.get('/customers', async (req, res) => {
     try {
         const customers = await Customer.findAll();
@@ -17,8 +15,6 @@ router.get('/customers', async (req, res) => {
             name: customer.name.trim(),
             email: customer.email.trim(),
             cpf: customer.cpf.trim(),
-            createdAt: customer.createdAt,
-            updatedAt: customer.updatedAt
           }));
         
         res.render('admin/customers', { customers: trimedCustomers });
@@ -46,7 +42,7 @@ router.post('/customers/new', [
     } else {
 
         try {
-            await Customer.create({name, email, cpf});
+            await Customer.create({ name, email, cpf });
             res.redirect('/admin/customers')
         } catch (error) {
             res.redirect('/admin/customers')
@@ -72,7 +68,7 @@ router.post('/customers/edit/:id', [
     body('cpf').notEmpty().withMessage({text: 'O CPF é obrigatório'}).isInt().withMessage({text: 'CPF inválido'})  
   ], async (req, res) => {
     const errors = validationResult(req);
-    const {id ,name, email, cpf} = req.body
+    const { id ,name, email, cpf } = req.body
     
     if (!errors.isEmpty()) {
         const errorMessages = errors.array().map(error => error.msg);
@@ -95,7 +91,6 @@ router.post('/customers/delete' , async (req, res) => {
     console.log('acessado');
     const selectedCustomers = req.body.customers
 
-    console.log(selectedCustomers)
     await Customer.destroy({
         where: {
             id: selectedCustomers
@@ -104,7 +99,7 @@ router.post('/customers/delete' , async (req, res) => {
     .then(() => {
         res.sendStatus(200);
     })
-    .catch(error => {
+    .catch((error) => {
         console.error(error);
         res.sendStatus(500);
     });

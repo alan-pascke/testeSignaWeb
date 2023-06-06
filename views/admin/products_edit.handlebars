@@ -1,0 +1,33 @@
+{{#each errors}}
+    <div class="alert alert-danger">
+        {{text}}
+    </div>
+    
+    {{else}}
+
+{{/each}}
+
+<h3>Editar Produto</h3>
+<div class="card">
+    <div class="card-body">
+
+        <form action="/admin/products/edit/{{product.id}}" method="POST">
+            <input type="hidden" title="id" id="{{product.id}}" name="id" value="{{product.id}}">
+            <label for="title">Nome</label>
+                <input type="text" id="title" title="title" name="title" class="form-control" value="{{product.title}}">
+            
+            <label for="sku">Sku</label>
+                <input type="sku" id="sku" title="sku" name="sku" class="form-control" value="{{product.sku_product}}">
+            
+            <label for="value">Valor</label>
+                <input type="number" id="value" name="value" title="value" class="form-control" value="{{product.value}}">
+                
+            <label for="stock">Estoque</label>
+                <input type="number" id="stock" name="stock" title="stock" class="form-control" value="{{product.stock}}">    
+            
+                <br>
+            <button type="submit" class="btn btn-success">Editar Produto</button>
+        </form>
+        
+    </div>
+</div>

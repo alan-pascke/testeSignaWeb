@@ -23,7 +23,6 @@
                         <th scope="col">Valor</th>
                         <th scope="col">Estoque</th>
                         <th scope="col">sku</th>
-                        <th scope="col">Data</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -38,7 +37,6 @@
                         <td>{{value}}</td>
                         <td>{{stock}}</td>
                         <td>{{sku}}</td>
-                        <td>{{date}}</td>
                         <td>
                             <a href="./products/edit/{{id}}">
                                 <button class="btn btn-secondary btn-edit">Editar</button>
@@ -47,7 +45,7 @@
                     </tr>    
                 {{else}}
                     <tr>
-                        <td colspan="4">Nenhum cliente registrado1</td>
+                        <td colspan="6" class="">Nenhum produto registrado</td>
                     </tr>    
                 {{/each}}
                 </tbody>
@@ -79,10 +77,9 @@
         }
     }
 
-    function deleteproducts() {
-        const checkboxes = document.getElementsByName('selectedproducts[]');
+    function deleteProducts() {
+        const checkboxes = document.getElementsByName('selectedProducts[]');
         const selectedProducts = [];
-
 
         for (let i = 0; i < checkboxes.length; i++) {
             if (checkboxes[i].checked) {
@@ -91,19 +88,13 @@
         }
 
         if (selectedProducts.length > 0) {
-            confirm('Tem certeza que deseja excluir?') == 'ok' ? 
-                fetch('/admin/products/delete', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ products: selectedProducts })
-                })
+            confirm('Tem certeza que deseja excluir?') == true ? 
+                axios.post('/admin/products/delete', { products: selectedProducts })
                 .then(response => {
-                    if (response.ok) {
+                    if (response.status == 200) {
                         location.reload();
                     } else {
-                        alert('Erro ao excluir o produto!');
+                        console.log('houve um erro')
                     }
                 })
                 .catch(error => {
